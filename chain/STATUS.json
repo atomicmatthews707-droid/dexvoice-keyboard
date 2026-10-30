@@ -1,0 +1,58 @@
+{
+  "project": "dexvoice-keyboard",
+  "quota_hit": false,
+  "resume_scheduled": false,
+  "stopped": false,
+  "stop_reason": null,
+  "steps": {
+    "1": {
+      "title": "Scaffold, signing, CI",
+      "state": "pending",
+      "started": null,
+      "updated": null,
+      "deferrals": 0
+    },
+    "2": {
+      "title": "Settings, secure storage, audio recorder",
+      "state": "pending",
+      "started": null,
+      "updated": null,
+      "deferrals": 0
+    },
+    "3": {
+      "title": "Transcription providers (Groq/OpenAI-compat, Wispr)",
+      "state": "pending",
+      "started": null,
+      "updated": null,
+      "deferrals": 0
+    },
+    "4": {
+      "title": "Voice controller, keyboard (IME), RecognitionService",
+      "state": "pending",
+      "started": null,
+      "updated": null,
+      "deferrals": 0
+    },
+    "5": {
+      "title": "Floating bubble, hotkey, notification, tile",
+      "state": "pending",
+      "started": null,
+      "updated": null,
+      "deferrals": 0
+    },
+    "6": {
+      "title": "Onboarding checklist, error UX, README",
+      "state": "pending",
+      "started": null,
+      "updated": null,
+      "deferrals": 0
+    },
+    "7": {
+      "title": "Full verification and repair, summary",
+      "state": "pending",
+      "started": null,
+      "updated": null,
+      "deferrals": 0
+    }
+  }
+}
