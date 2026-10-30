@@ -149,15 +149,15 @@ class OnboardingActivity : AppCompatActivity() {
                 setPadding(0, dp(10), 0, dp(10))
             }
             r.mark = TextView(this).apply { textSize = 24f; gravity = Gravity.CENTER; minWidth = dp(40) }
-            val text = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-            text.addView(TextView(this).apply { this.text = r.title; textSize = 17f; setTextColor(Color.WHITE) })
-            text.addView(TextView(this).apply { this.text = r.detail; textSize = 14f })
+            val textCol = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+            textCol.addView(TextView(this).apply { this.text = r.title; textSize = 17f; setTextColor(Color.WHITE) })
+            textCol.addView(TextView(this).apply { this.text = r.detail; textSize = 14f })
             r.button = Button(this).apply {
                 text = r.fixLabel; isAllCaps = false; minHeight = dp(56); minimumHeight = dp(56)
                 setOnClickListener { r.fix() }
             }
             line.addView(r.mark)
-            line.addView(text, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+            line.addView(textCol, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
             line.addView(r.button, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
             col.addView(line)
         }
