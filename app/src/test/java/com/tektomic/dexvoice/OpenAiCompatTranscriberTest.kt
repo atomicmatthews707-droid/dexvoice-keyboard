@@ -21,7 +21,7 @@ class OpenAiCompatTranscriberTest {
         settings.apiBaseUrl = server.url("/openai/v1").toString()
         settings.language = "en"
         settings.vocabularyHint = "Tektomic, DeX"
-        wav = File.createTempFile("t", ".wav").also { it.writeBytes(ByteArray(2000) { 1 }); it.deleteOnExit() }
+        wav = File.createTempFile("test", ".wav").also { it.writeBytes(ByteArray(2000) { 1 }); it.deleteOnExit() }
     }
     @After fun tearDown() { server.shutdown() }
 
