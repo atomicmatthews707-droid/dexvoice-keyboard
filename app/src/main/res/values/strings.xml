@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DeX Voice</string>
+    <string name="ime_name">DeX Voice</string>
+    <string name="ime_subtype_voice">Voice dictation</string>
+    <string name="recognizer_name">DeX Voice</string>
 </resources>
