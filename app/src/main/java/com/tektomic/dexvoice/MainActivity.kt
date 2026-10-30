@@ -4,11 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-/** Launcher entry: opens the settings screen (later steps add the checklist there). */
+/** Launcher entry: shows the setup checklist until the required items are done, then settings. */
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity(Intent(this, SettingsActivity::class.java))
+        val done = try { OnboardingActivity.requiredDone(this) } catch (_: Exception) { false }
+        startActivity(Intent(this, if (done) SettingsActivity::class.java else OnboardingActivity::class.java))
         finish()
     }
 }

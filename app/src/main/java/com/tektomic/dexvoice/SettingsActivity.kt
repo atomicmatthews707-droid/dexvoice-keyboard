@@ -129,6 +129,8 @@ class SettingsActivity : AppCompatActivity() {
 
         col.addView(toggle("Add a trailing space after dictated text", settings.trailingSpace) { settings.trailingSpace = it })
         col.addView(toggle("Always show the on-screen keyboard (even with a physical keyboard)", settings.alwaysShowKeyboard) { settings.alwaysShowKeyboard = it })
+        col.addView(toggle("Vibrate briefly when dictation starts and stops", settings.haptics) { settings.haptics = it })
+        col.addView(toggle("Play start and stop sounds", settings.sounds) { settings.sounds = it })
         col.addView(toggle("Show floating mic bubble", settings.bubbleEnabled) { on ->
             settings.bubbleEnabled = on
             if (on) {
@@ -154,6 +156,18 @@ class SettingsActivity : AppCompatActivity() {
         col.addView(Button(this).apply {
             text = "Open accessibility settings"
             setOnClickListener { startActivity(android.content.Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
+        })
+
+        label("Help")
+        col.addView(Button(this).apply {
+            text = "Open setup checklist"
+            minHeight = dp(56)
+            setOnClickListener { startActivity(android.content.Intent(this@SettingsActivity, OnboardingActivity::class.java)) }
+        })
+        col.addView(Button(this).apply {
+            text = "Share debug log"
+            minHeight = dp(56)
+            setOnClickListener { shareLog() }
         })
 
         label("Microphone")
@@ -216,6 +230,16 @@ class SettingsActivity : AppCompatActivity() {
             apiKey.setText("")
             keyStatus.text = "Key saved"
         }
+    }
+
+    private fun shareLog() {
+        val keys = listOf(secrets.openAiKey, secrets.wisprKey)
+        val text = DebugLog.read(this, keys)
+        val send = android.content.Intent(android.content.Intent.ACTION_SEND)
+            .setType("text/plain")
+            .putExtra(android.content.Intent.EXTRA_SUBJECT, "DeX Voice debug log")
+            .putExtra(android.content.Intent.EXTRA_TEXT, text)
+        try { startActivity(android.content.Intent.createChooser(send, "Share debug log")) } catch (_: Exception) {}
     }
 
     private fun testMic() {

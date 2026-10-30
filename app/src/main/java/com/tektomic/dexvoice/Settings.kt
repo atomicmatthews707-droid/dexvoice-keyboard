@@ -59,6 +59,14 @@ class Settings(private val prefs: SharedPreferences) {
         get() = prefs.getInt(K_MAX_SECONDS, DEFAULT_MAX_SECONDS).coerceIn(1, 600)
         set(v) = prefs.edit().putInt(K_MAX_SECONDS, v.coerceIn(1, 600)).apply()
 
+    var haptics: Boolean
+        get() = prefs.getBoolean(K_HAPTICS, true)
+        set(v) = prefs.edit().putBoolean(K_HAPTICS, v).apply()
+
+    var sounds: Boolean
+        get() = prefs.getBoolean(K_SOUNDS, false)
+        set(v) = prefs.edit().putBoolean(K_SOUNDS, v).apply()
+
     var bubbleEnabled: Boolean
         get() = prefs.getBoolean(K_BUBBLE, false)
         set(v) = prefs.edit().putBoolean(K_BUBBLE, v).apply()
@@ -96,6 +104,8 @@ class Settings(private val prefs: SharedPreferences) {
         const val K_HOTKEY_CODE = "hotkey_key_code"
         const val K_HOTKEY_META = "hotkey_meta_state"
         const val K_MAX_SECONDS = "max_record_seconds"
+        const val K_HAPTICS = "haptics"
+        const val K_SOUNDS = "sounds"
         const val K_BUBBLE = "bubble_enabled"
         const val K_BUBBLE_BOOT = "bubble_on_boot"
     }

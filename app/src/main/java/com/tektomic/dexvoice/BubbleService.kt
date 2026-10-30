@@ -48,6 +48,7 @@ class BubbleService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        isRunning = true
         settings = Settings(this)
         controller = VoiceController.get(this)
         displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
@@ -68,6 +69,7 @@ class BubbleService : Service() {
     }
 
     override fun onDestroy() {
+        isRunning = false
         DexVoiceIme.inputStartListener = null
         try { displayManager.unregisterDisplayListener(displayListener) } catch (_: Exception) {}
         removeBubble()
@@ -192,6 +194,7 @@ class BubbleService : Service() {
     }
 
     companion object {
+        @Volatile var isRunning = false
         fun start(context: Context) {
             context.startForegroundService(Intent(context, BubbleService::class.java))
         }
