@@ -1,7 +1,7 @@
 {
   "project": "dexvoice-keyboard",
   "quota_hit": false,
-  "resume_scheduled": false,
+  "resume_scheduled": true,
   "stopped": false,
   "stop_reason": null,
   "steps": {
