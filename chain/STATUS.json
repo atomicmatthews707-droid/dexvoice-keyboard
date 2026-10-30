@@ -7,9 +7,9 @@
   "steps": {
     "1": {
       "title": "Scaffold, signing, CI",
-      "state": "running",
+      "state": "done",
       "started": "2026-10-30T01:15:43Z",
-      "updated": "2026-10-30T01:15:43Z",
+      "updated": "2026-10-30T01:24:01Z",
       "deferrals": 0
     },
     "2": {

@@ -1,0 +1,39 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+      - name: Build and test
+        run: gradle assembleDebug testDebugUnitTest --stacktrace
+      - name: Rename APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk DexVoice.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DexVoice
+          path: DexVoice.apk
+      - name: Publish latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view latest >/dev/null 2>&1; then
+            gh release upload latest DexVoice.apk --clobber
+          else
+            gh release create latest DexVoice.apk --title "Latest build" --notes "Latest debug build of DeX Voice." --target "$GITHUB_SHA"
+          fi
