@@ -21,9 +21,9 @@
     },
     "3": {
       "title": "Transcription providers (Groq/OpenAI-compat, Wispr)",
-      "state": "pending",
-      "started": null,
-      "updated": null,
+      "state": "running",
+      "started": "2026-10-30T01:55:59Z",
+      "updated": "2026-10-30T01:55:59Z",
       "deferrals": 0
     },
     "4": {
