@@ -28,16 +28,16 @@
     },
     "4": {
       "title": "Voice controller, keyboard (IME), RecognitionService",
-      "state": "running",
+      "state": "done",
       "started": "2026-10-30T02:36:05Z",
-      "updated": "2026-10-30T02:43:59Z",
+      "updated": "2026-10-30T02:55:35Z",
       "deferrals": 1
     },
     "5": {
       "title": "Floating bubble, hotkey, notification, tile",
-      "state": "pending",
-      "started": null,
-      "updated": null,
+      "state": "done",
+      "started": "2026-10-30T02:55:35Z",
+      "updated": "2026-10-30T02:55:35Z",
       "deferrals": 0
     },
     "6": {

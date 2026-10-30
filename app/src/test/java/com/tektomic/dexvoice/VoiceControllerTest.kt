@@ -45,7 +45,7 @@ class VoiceControllerTest {
         )
     }
 
-    private fun wav(): File = File.createTempFile("t", ".wav").apply { writeBytes(ByteArray(10)) }
+    private fun wav(): File = File.createTempFile("dvtest", ".wav").apply { writeBytes(ByteArray(10)) }
 
     private fun TestScope.env(text: Result<String> = Result.success("hello world ")) =
         Env(this, FakeCapture().apply { fileToReturn = wav() }, FakeTranscriber(text))

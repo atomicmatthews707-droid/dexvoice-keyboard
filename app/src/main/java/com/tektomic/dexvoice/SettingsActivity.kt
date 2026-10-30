@@ -35,6 +35,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var showBtn: Button
     private lateinit var hint: EditText
     private lateinit var micResult: TextView
+    private lateinit var hotkeyText: TextView
     private var keyVisible = false
     private var recorder: WavRecorder? = null
 
@@ -49,6 +50,14 @@ class SettingsActivity : AppCompatActivity() {
         secrets = SecretStore.create(this)
         setContentView(buildUi())
         loadValues()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (::hotkeyText.isInitialized) {
+            hotkeyText.text = "Current shortcut: " + if (settings.hasHotkey)
+                HotkeyMatcher.describe(settings.hotkeyKeyCode, settings.hotkeyMetaState) else "Ctrl+Shift+Space (default)"
+        }
     }
 
     override fun onPause() {
@@ -120,7 +129,32 @@ class SettingsActivity : AppCompatActivity() {
 
         col.addView(toggle("Add a trailing space after dictated text", settings.trailingSpace) { settings.trailingSpace = it })
         col.addView(toggle("Always show the on-screen keyboard (even with a physical keyboard)", settings.alwaysShowKeyboard) { settings.alwaysShowKeyboard = it })
-        col.addView(toggle("Show floating mic bubble", settings.bubbleEnabled) { settings.bubbleEnabled = it })
+        col.addView(toggle("Show floating mic bubble", settings.bubbleEnabled) { on ->
+            settings.bubbleEnabled = on
+            if (on) {
+                if (!android.provider.Settings.canDrawOverlays(this)) {
+                    startActivity(
+                        android.content.Intent(
+                            android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            android.net.Uri.parse("package:$packageName"),
+                        )
+                    )
+                }
+                try { BubbleService.start(this) } catch (_: Exception) {}
+            } else BubbleService.stop(this)
+        })
+        col.addView(toggle("Start the bubble when the phone boots", settings.bubbleOnBoot) { settings.bubbleOnBoot = it })
+
+        label("Keyboard shortcut (needs the DeX Voice accessibility service switched on; it only listens for this shortcut)")
+        hotkeyText = TextView(this).also { col.addView(it) }
+        col.addView(Button(this).apply {
+            text = "Set shortcut"
+            setOnClickListener { startActivity(android.content.Intent(this@SettingsActivity, HotkeyCaptureActivity::class.java)) }
+        })
+        col.addView(Button(this).apply {
+            text = "Open accessibility settings"
+            setOnClickListener { startActivity(android.content.Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
+        })
 
         label("Microphone")
         col.addView(Button(this).apply {

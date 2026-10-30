@@ -63,6 +63,21 @@ class Settings(private val prefs: SharedPreferences) {
         get() = prefs.getBoolean(K_BUBBLE, false)
         set(v) = prefs.edit().putBoolean(K_BUBBLE, v).apply()
 
+    var bubbleOnBoot: Boolean
+        get() = prefs.getBoolean(K_BUBBLE_BOOT, false)
+        set(v) = prefs.edit().putBoolean(K_BUBBLE_BOOT, v).apply()
+
+    /** Saved bubble position for a display as (x, y) in pixels, or null if never moved. */
+    fun bubblePosition(displayId: Int): Pair<Int, Int>? {
+        val x = prefs.getInt("bubble_x_$displayId", Int.MIN_VALUE)
+        val y = prefs.getInt("bubble_y_$displayId", Int.MIN_VALUE)
+        return if (x == Int.MIN_VALUE || y == Int.MIN_VALUE) null else x to y
+    }
+
+    fun setBubblePosition(displayId: Int, x: Int, y: Int) {
+        prefs.edit().putInt("bubble_x_$displayId", x).putInt("bubble_y_$displayId", y).apply()
+    }
+
     companion object {
         const val PREFS_NAME = "dexvoice_settings"
         const val PROVIDER_OPENAI_COMPAT = "openai_compat"
@@ -82,5 +97,6 @@ class Settings(private val prefs: SharedPreferences) {
         const val K_HOTKEY_META = "hotkey_meta_state"
         const val K_MAX_SECONDS = "max_record_seconds"
         const val K_BUBBLE = "bubble_enabled"
+        const val K_BUBBLE_BOOT = "bubble_on_boot"
     }
 }

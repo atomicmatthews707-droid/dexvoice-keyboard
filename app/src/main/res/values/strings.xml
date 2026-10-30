@@ -4,4 +4,6 @@
     <string name="ime_name">DeX Voice</string>
     <string name="ime_subtype_voice">Voice dictation</string>
     <string name="recognizer_name">DeX Voice</string>
+    <string name="hotkey_service_description">DeX Voice only listens for your dictation shortcut key combination (Ctrl+Shift+Space by default) so you can start and stop dictation from the keyboard. It does not read the screen, your text or any other app, and it does not type anything for you.</string>
+    <string name="tile_label">DeX Voice</string>
 </resources>
