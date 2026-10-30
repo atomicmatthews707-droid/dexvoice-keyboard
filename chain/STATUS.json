@@ -49,9 +49,9 @@
     },
     "7": {
       "title": "Full verification and repair, summary",
-      "state": "running",
+      "state": "done",
       "started": "2026-10-30T03:16:25Z",
-      "updated": "2026-10-30T03:16:25Z",
+      "updated": "2026-10-30T03:24:46Z",
       "deferrals": 0
     }
   }

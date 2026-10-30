@@ -52,10 +52,7 @@ class BubbleService : Service() {
         settings = Settings(this)
         controller = VoiceController.get(this)
         displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
-        startForegroundCompat(controller.state.value)
-        if (!canDraw()) {
-            // Onboarding explains the overlay permission; just keep the notification.
-        }
+        if (!startForegroundCompat(controller.state.value)) return
         displayManager.registerDisplayListener(displayListener, null)
         DexVoiceIme.inputStartListener = { retarget(it) }
         scope.launch { controller.state.collect { onState(it) } }
@@ -64,6 +61,7 @@ class BubbleService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (!::settings.isInitialized || !isRunning) return START_NOT_STICKY
         retarget()
         return START_STICKY
     }
@@ -71,7 +69,7 @@ class BubbleService : Service() {
     override fun onDestroy() {
         isRunning = false
         DexVoiceIme.inputStartListener = null
-        try { displayManager.unregisterDisplayListener(displayListener) } catch (_: Exception) {}
+        try { if (::displayManager.isInitialized) displayManager.unregisterDisplayListener(displayListener) } catch (_: Exception) {}
         removeBubble()
         scope.cancel()
         super.onDestroy()
@@ -79,16 +77,33 @@ class BubbleService : Service() {
 
     private fun canDraw() = AndroidSettings.canDrawOverlays(this)
 
-    private fun startForegroundCompat(state: VoiceState) {
+    /** Returns false (and stops the service) if it could not become a foreground service. */
+    private fun startForegroundCompat(state: VoiceState): Boolean {
         val n = ControlNotification.build(this, state)
-        try {
-            startForeground(
-                ControlNotification.NOTIFICATION_ID, n,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE,
-            )
-        } catch (e: Exception) {
-            stopSelf()
+        // The microphone type keeps recording allowed when a hotkey or tile is used while another
+        // app is in front. It is refused when started from the background (e.g. boot), so fall back.
+        val micOk = checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) ==
+            android.content.pm.PackageManager.PERMISSION_GRANTED
+        val types = listOfNotNull(
+            if (micOk) ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE else null,
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE,
+        )
+        for (t in types) {
+            try {
+                startForeground(ControlNotification.NOTIFICATION_ID, n, t)
+                return true
+            } catch (e: Exception) {
+                DebugLog.log(this, "BUBBLE", "startForeground type $t failed: ${e.javaClass.simpleName}")
+            }
         }
+        try {
+            startForeground(ControlNotification.NOTIFICATION_ID, n) // Android 13: no typed services
+            return true
+        } catch (e: Exception) {
+            DebugLog.log(this, "BUBBLE", "startForeground failed: ${e.javaClass.simpleName}")
+        }
+        stopSelf()
+        return false
     }
 
     private fun onState(s: VoiceState) {
