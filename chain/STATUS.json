@@ -28,9 +28,9 @@
     },
     "4": {
       "title": "Voice controller, keyboard (IME), RecognitionService",
-      "state": "pending",
-      "started": null,
-      "updated": null,
+      "state": "running",
+      "started": "2026-10-30T02:36:05Z",
+      "updated": "2026-10-30T02:36:05Z",
       "deferrals": 1
     },
     "5": {
