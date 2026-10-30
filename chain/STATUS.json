@@ -31,7 +31,7 @@
       "state": "pending",
       "started": null,
       "updated": null,
-      "deferrals": 0
+      "deferrals": 1
     },
     "5": {
       "title": "Floating bubble, hotkey, notification, tile",
